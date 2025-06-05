@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Recruitment Fraud (ORF) Detection Using Machine Learning </title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+       body {
+            background-color: black; /* Fallback color */
+            background-image: url("{{ url_for('static', filename='images/fake-news-bg.jpg') }}"); /* Static image path */
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #ffffff; /* White background */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: 50px auto;
+            color: black;
+        }
+
+        h1 {
+            text-align: center;
+            color: olive;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.2em;
+            border: none;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading-indicator img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .output-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #e74c3c;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color:white;
+        }
+
+        .footer a {
+            color:white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .dashboard-link {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .dashboard-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1.1em;
+            display: inline-block;
+            margin-top: 20px;
+            width: 30%;
+            text-align: center;
+        }
+
+        .dashboard-btn:hover {
+            background-color: #c0392b;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Online Recruitment Fraud (ORF) Detection Using Machine Learning </h1>
+    <form method="POST" action="/predict" onsubmit="showLoadingIndicator(event)">
+        
+        <!-- Input fields for flood prediction -->
+        <div class="input-group">
+            <label for="job_title">Job Title</label>
+            <select name="job_title" id="job_title" required>
+                <option value="">Select job_title Type</option>
+                <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                        <option value="HR Executive">HR Executive</option>
+                        <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+                        <option value="Marketing Manager">Marketing Manager</option>
+                        <option value="Sales Associate">Sales Associate</option>
+                        <option value="Data Analyst">Data Analyst</option>
+                        <option value="Software Engineer">Software Engineer</option>
+                        <option value="Graphic Designer">Graphic Designer</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="job_type">Job Type</label>
+            <select name="job_type" id="job_type" required>
+                <option value="">Select job Type</option>
+                <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="salary_offered">salary offered</label>
+            <input type="text" name="salary_offered" id="salary_offered" required step="any" placeholder="Enter Salary Offered">
+        </div>
+        <div class="input-group">
+            <label for="job_location">Job Location</label>
+            <select name="job_location" id="job_location" required>
+                <option value="">Select job Location</option>
+                <option value="UK">UK</option>
+                        <option value="India">India</option>
+                        <option value="Remote">Remote</option>
+                        <option value="Canada">Canada</option>
+                        <option value="USA">USA</option>
+                        <option value="Germany">Germany</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="remote">Remote</label>
+            <select name="remote" id="remote" required>
+                <option value="">Select Remote</option>
+                <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="required_experience">Required Experience</label>
+            <input type="text" name="required_experience" id="required_experience" required step="any" placeholder="Enter required experience">
+        </div>
+
+        <div class="input-group">
+            <label for="company_rating">company rating</label>
+            <input type="text" name="company_rating" id="company_rating"  min="0" max="5"required  placeholder="Enter rainfall in mm">
+        </div>
+
+        <div class="input-group">
+            <label for="job_description_length">job description length</label>
+            <input type="text" name="job_description_length" id="job_description_length" required step="any" placeholder="Enter job description length">
+        </div>
+
+        <div class="input-group">
+            <label for="number_of_applicants">number_of_applicants</label>
+            <input type="text" name="number_of_applicants" id="number_of_applicants" required step="any" placeholder="Enter number of applicants">
+        </div>
+
+        
+        <!-- Dropdown for Land Cover -->
+    
+
+        <!-- Dropdown for Soil Type -->
+        <div class="input-group">
+            <label for="email_domain">email domain</label>
+            <select name="email_domain" id="email_domain" required>
+                <option value="">Select email domain</option>
+                <option value="gmail.com">gmail.com</option>
+                        <option value="company.com">company.com</option>
+                        <option value="hr-recruit.com">hr-recruit.com</option>
+                        <option value="yahoo.com">yahoo.com</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="phone_contact">phone contact</label>
+            <select name="phone_contact" id="phone_contact" required>
+                <option value="">Select phone contact</option>
+                <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+            </select>
+        </div>
+
+        
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Predict ORF</button>
+    </form>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator">
+        <img src="https://i.gifer.com/7ajs.gif" alt="Loading...">
+    </div>
+
+    <!-- Output Label for Prediction Result -->
+    <div class="output-label" id="outputLabel"></div>
+</div>
+
+<div class="dashboard-link">
+    <a href="/dashboard" class="dashboard-btn">Go to Dashboard</a>
+</div>
+
+<div class="footer">
+    &copy; 2025 Online Recruitment Fraud (ORF) Detection Using Machine Learning Approaches Project. All Rights Reserved.
+</div>
+
+<script>
+    function showLoadingIndicator(event) {
+        event.preventDefault();
+        document.querySelector('.loading-indicator').style.display = 'block';
+        event.target.submit();
+    }
+</script>
+
+</body>
+</html>
